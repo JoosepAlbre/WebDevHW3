@@ -1,17 +1,71 @@
 <template>
-    <Nav/>
+    <div class="index">
+        <Nav/>
+        <section class="main-container">
+        <div class="post" v-for="post in posts" v-bind:key="posts.indexOf(post)">
+            <div class="post-author">
+                <span class="post-author-info">
+                    <span></span>
+            <img v-bind:src=post.author.avatar alt="Post author">
+            <small class="author-name">{{post.author.firstname + " " + post.author.lastname}}</small>
+          </span>
+                <small class="date"></small>
+            </div>
+            <div v-if="post.media != null" class="post-image">
+                <img v-if="post.media.type == 'image'" v-bind:src=post.media.url alt="">
+                <video v-if="post.media.type == 'video'" controls >
+                    <source v-bind:src="post.media.url" type="video/mp4">
+                </video>
+            </div>
+            <div class="post-title">
+                <h3>{{post.text}}</h3>
+            </div>
+            <div class="post-actions">
+                <button @click="like()" :class="{'like-button' : !isLiked, 'like-button liked' : isLiked}">
+                    {{post.likes}}
+                </button>
+            </div>
+        </div>
+        </section>
+    </div>
 </template>
 
 
 <script>
-
 import Nav from './Nav'
 
 export default {
     name: 'Index',
     components: {
         Nav
+    },
+    data() {
+        return {
+            isLiked: false
+        }
+    },
+    computed: {
+            posts: function () {
+                return this.$store.state.posts
+            }
+  }, methods: {
+      like: function() {
+      this.isLiked = !this.isLiked;
+
     }
+  },
+    mounted: function() {    
+    fetch('https://private-517bb-wad20postit.apiary-mock.com/posts', {
+      method: 'get'
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((jsonData) => {
+      this.$store.commit('addAllPosts', jsonData)
+      console.log(this.posts)
+    })
+  }
 }
 </script>
 
@@ -20,13 +74,6 @@ export default {
 
 <style scoped>
 
-       .main-container {
-    width: 50%;
-    min-height: 100%;
-    margin: auto auto;
-    padding: 90px 15px 15px 15px;
-    background-color: #ffffff;
-}
 
 .post {
     width: 80%;
@@ -108,24 +155,6 @@ export default {
 
 .like-button.liked {
     background-color: #01579b;
-}
-.drop-down-container {
-    position: absolute;
-    min-width: 150px;
-    height: auto;
-    background-color: #ffffff;
-    padding: 10px;
-    right: 0;
-    top: 50px;
-    text-align: left;
-    display: none;
-}
-.drop-down-container span{
-    display: block;
-}
-.drop-down-container span.separator{
-    border-bottom: 1px solid #d7d7d7;
-    margin: 10px -10px;
 }
 </style>
 

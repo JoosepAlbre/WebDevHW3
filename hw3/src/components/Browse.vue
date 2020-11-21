@@ -1,5 +1,20 @@
 <template>
+<div class="browse">
     <Nav/>
+    <section class="main-container">
+        <div class="profile-feed">
+            <div class="profile" v-for="profile in profiles" v-bind:key="profiles.indexOf(profile)">
+                <img v-bind:src =profile.avatar alt = "Post autohor">
+                <p>{{profile.firstname + " " + profile.lastname}}</p>
+                <button @click="follow()" :class="{'follow-button' : isFollowing, 'follow-button followed' : !isFollowing}">
+                   <span v-if="!isFollowing" >Followed</span>
+                   <span v-if="isFollowing" >Follow</span>
+                </button>
+            </div>
+        </div>
+
+    </section>
+</div>
 </template>
 
 
@@ -11,7 +26,35 @@ export default {
     name: 'Browse',
     components: {
     Nav
+  },
+  data() {
+      return {
+          isFollowing: true
+      }
+  },
+  methods: {
+      follow: function() {
+          this.isFollowing = !this.isFollowing
+      }
+  },
+  computed: {
+            profiles: function () {
+                return this.$store.state.profiles
+            }
+  },
+   mounted: function() {    
+    fetch('https://private-anon-8206ed6edc-wad20postit.apiary-mock.com/profiles', {
+      method: 'get'
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((jsonData) => {
+      this.$store.commit('addAllProfiles', jsonData)
+      console.log(this.profiles)
+    })
   }
+  
 }
 </script>
 

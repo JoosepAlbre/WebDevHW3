@@ -41,7 +41,7 @@ export default {
     name: "Login",
     methods: {
       login() {
-        this.$router.push({path: '/index'});
+        this.$router.push({path: '/main'});
       }
     }
 }

@@ -7,10 +7,14 @@
           <input type="text" name="search"><button type="button">Search</button>
         </div>
         <div class="avatar-container">
-          <img class="avatar">
-          <div class="drop-down-container">
-            <span id="user-name">John Doe</span>
+          <img @click="toggleMenu()" v-bind:src="user.avatar" class="avatar">
+          <div v-if="menuClicked" class="drop-down-container">
+            <span id="user-name">{{user.firstname + " " + user.lastname}}</span>
             <span id="user-email"></span>
+            <span class="separator"></span>
+            <span>
+              <router-link to="/main">Main Page</router-link>
+            </span>
             <span class="separator"></span>
             <span>
               <router-link to="/browse">Browse</router-link>
@@ -26,8 +30,34 @@
 
 <script>
 export default {
-  name: 'Nav'
-
+  name: 'Nav',
+  data() {
+    return {
+      menuClicked: false
+    }
+  },
+  computed: {
+            user: function () {
+                return this.$store.state.user
+            }
+  },
+  methods: {
+      toggleMenu: function() {
+          this.menuClicked = !this.menuClicked
+      }
+  },
+    mounted: function() {    
+    fetch('https://private-517bb-wad20postit.apiary-mock.com/users/1', {
+      method: 'get'
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((jsonData) => {
+      this.$store.commit('addUser', jsonData)
+      console.log(this.user)
+    })
+  }
 }
 </script>
 
@@ -86,5 +116,24 @@ nav div.search-container > button {
 nav div.avatar-container {
     margin-right: 15px;
     text-align: right;
+}
+
+.drop-down-container {
+    position: absolute;
+    min-width: 150px;
+    height: auto;
+    background-color: #ffffff;
+    padding: 10px;
+    right: 0;
+    top: 50px;
+    text-align: left;
+    
+}
+.drop-down-container span{
+    display: block;
+}
+.drop-down-container span.separator{
+    border-bottom: 1px solid #d7d7d7;
+    margin: 10px -10px;
 }
 </style>
