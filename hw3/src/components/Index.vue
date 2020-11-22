@@ -7,7 +7,7 @@
                 <span class="post-author-info">
                     <span></span>
             <img v-bind:src=post.author.avatar alt="Post author">
-            <small class="author-name">{{post.author.firstname + " " + post.author.lastname}}</small>
+            <small class="author-name">{{post.author.firstname}}</small>
           </span>
                 <small class="date">{{post.createTime}}</small>
             </div>
@@ -21,7 +21,7 @@
                 <h3>{{post.text}}</h3>
             </div>
             <div class="post-actions">
-                <button @click="like()" :class="{'like-button' : !isLiked, 'like-button liked' : isLiked}">
+                <button @click="toggleLike" class="like-button">
                     {{post.likes}}
                 </button>
             </div>
@@ -39,19 +39,19 @@ export default {
     components: {
         Nav
     },
-    data() {
-        return {
-            isLiked: false
-        }
-    },
     computed: {
             posts: function () {
                 return this.$store.state.posts
             }
-  }, methods: {
-      like: function() {
-      this.isLiked = !this.isLiked;
-
+  },
+  filters: {
+  fullName: function (value, lastname) {
+    return value + " " + lastname
+  }
+},
+ methods: {
+    toggleLike(event) {
+        event.target.classList.toggle("liked")
     }
   },
     mounted: function() {    

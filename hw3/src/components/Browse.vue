@@ -6,9 +6,8 @@
             <div class="profile" v-for="profile in profiles" v-bind:key="profile.id">
                 <img v-bind:src =profile.avatar alt = "Post autohor">
                 <p>{{profile.firstname + " " + profile.lastname}}</p>
-                <button @click="follow()" :class="{'follow-button' : isFollowing, 'follow-button followed' : !isFollowing}">
-                   <span v-if="!isFollowing" >Followed</span>
-                   <span v-if="isFollowing" >Follow</span>
+                <button @click="toggleFollow" class="follow-button">
+                    Follow
                 </button>
             </div>
         </div>
@@ -27,15 +26,10 @@ export default {
     components: {
     Nav
   },
-  data() {
-      return {
-          isFollowing: true
-      }
-  },
   methods: {
-      follow: function() {
-          this.isFollowing = !this.isFollowing
-      }
+      toggleFollow(event) {
+        event.target.classList.toggle("followed")
+    }
   },
   computed: {
             profiles: function () {
