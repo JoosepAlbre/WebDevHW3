@@ -2,14 +2,14 @@
     <div class="index">
         <Nav/>
         <section class="main-container">
-        <div class="post" v-for="post in posts" v-bind:key="posts.indexOf(post)">
+        <div class="post" v-for="post in posts" v-bind:key="post.id">
             <div class="post-author">
                 <span class="post-author-info">
                     <span></span>
             <img v-bind:src=post.author.avatar alt="Post author">
             <small class="author-name">{{post.author.firstname + " " + post.author.lastname}}</small>
           </span>
-                <small class="date"></small>
+                <small class="date">{{post.createTime}}</small>
             </div>
             <div v-if="post.media != null" class="post-image">
                 <img v-if="post.media.type == 'image'" v-bind:src=post.media.url alt="">

@@ -40,9 +40,6 @@ const store = new Vuex.Store({
         getProfile: (state) => (id) => {
             return state.profiles[id]
         },
-        itemSelected: (state) => (id) => {
-            return state.posts.indexOf(id) > -1
-        }
     }
 })
 

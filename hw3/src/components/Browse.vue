@@ -3,7 +3,7 @@
     <Nav/>
     <section class="main-container">
         <div class="profile-feed">
-            <div class="profile" v-for="profile in profiles" v-bind:key="profiles.indexOf(profile)">
+            <div class="profile" v-for="profile in profiles" v-bind:key="profile.id">
                 <img v-bind:src =profile.avatar alt = "Post autohor">
                 <p>{{profile.firstname + " " + profile.lastname}}</p>
                 <button @click="follow()" :class="{'follow-button' : isFollowing, 'follow-button followed' : !isFollowing}">
